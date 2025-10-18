@@ -68,13 +68,13 @@
                 { NameToken.Type, NameToken.FontDescriptor },
                 { NameToken.FontName, baseFont },
                 // TODO: get flags TrueTypeEmbedder.java
-                { NameToken.Flags, new NumericToken((int)FontDescriptorFlags.Symbolic) },
+                { NameToken.Flags, NumericToken.Create((int)FontDescriptorFlags.Symbolic) },
                 { NameToken.FontBbox, GetBoundingBox(bbox, scaling) },
                 { NameToken.ItalicAngle, new NumericToken(postscript.ItalicAngle) },
                 { NameToken.Ascent, new NumericToken(Math.Round(hhead.Ascent * scaling, 2)) },
                 { NameToken.Descent, new NumericToken(Math.Round(hhead.Descent * scaling, 2)) },
-                { NameToken.CapHeight, new NumericToken(90) },
-                { NameToken.StemV, new NumericToken(90) },
+                { NameToken.CapHeight, NumericToken.Create(90) },
+                { NameToken.StemV, NumericToken.Create(90) },
                 { NameToken.FontFile2, fileRef }
             };
 
@@ -86,8 +86,8 @@
 
             if (os2 is Os2Version2To4OpenTypeTable twoPlus)
             {
-                descriptorDictionary[NameToken.CapHeight] = new NumericToken(twoPlus.CapHeight);
-                descriptorDictionary[NameToken.Xheight] = new NumericToken(twoPlus.XHeight);
+                descriptorDictionary[NameToken.CapHeight] = NumericToken.Create(twoPlus.CapHeight);
+                descriptorDictionary[NameToken.Xheight] = NumericToken.Create(twoPlus.XHeight);
             }
 
             descriptorDictionary[NameToken.StemV] = new NumericToken(bbox.Width * scaling * 0.13);
@@ -119,8 +119,8 @@
                 { NameToken.Subtype, NameToken.TrueType },
                 { NameToken.BaseFont, baseFont },
                 { NameToken.FontDescriptor, descriptor },
-                { NameToken.FirstChar, new NumericToken(0) },
-                { NameToken.LastChar, new NumericToken(lastCharacter) },
+                { NameToken.FirstChar, NumericToken.Create(0) },
+                { NameToken.LastChar, NumericToken.Create(lastCharacter) },
                 { NameToken.Widths, new ArrayToken(widths) },
                 {NameToken.ToUnicode, toUnicode }
             };

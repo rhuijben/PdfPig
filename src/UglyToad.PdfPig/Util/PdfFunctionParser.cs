@@ -97,8 +97,8 @@
                 int sizeValuesSize = size.Length;
                 for (int i = 0; i < sizeValuesSize; i++)
                 {
-                    values.Add(new NumericToken(0));
-                    values.Add(new NumericToken(((NumericToken)size[i]).Int - 1));
+                    values.Add(NumericToken.Zero);
+                    values.Add(NumericToken.Create(((NumericToken)size[i]).Int - 1));
                 }
                 encode = new ArrayToken(values);
             }
@@ -116,12 +116,12 @@
         {
             if (!functionDictionary.TryGet(NameToken.C0, scanner, out ArrayToken? array0) || array0.Length == 0)
             {
-                array0 = new ArrayToken(new List<NumericToken>() { new NumericToken(0) }); // Default value: [0.0].
+                array0 = new ArrayToken(new List<NumericToken>() { NumericToken.Zero }); // Default value: [0.0].
             }
 
             if (!functionDictionary.TryGet(NameToken.C1, scanner, out ArrayToken? array1) || array1.Length == 0)
             {
-                array1 = new ArrayToken(new List<NumericToken>() { new NumericToken(1) }); // Default value: [1.0].
+                array1 = new ArrayToken(new List<NumericToken>() { NumericToken.One }); // Default value: [1.0].
             }
 
             if (!functionDictionary.TryGet(NameToken.N, scanner, out NumericToken? exp))

@@ -1,17 +1,16 @@
 ﻿namespace UglyToad.PdfPig.Tokenization
 {
-    using System.Collections.Generic;
     using Core;
     using Scanner;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using Tokens;
 
-    internal class DictionaryTokenizer : ITokenizer
+    internal sealed class DictionaryTokenizer : InputByteTokenizer
     {
         private readonly bool usePdfDocEncoding;
-        private readonly IReadOnlyList<NameToken> requiredKeys;
+        private readonly IReadOnlyList<NameToken>? requiredKeys;
         private readonly bool useLenientParsing;
-
-        public bool ReadsNextByte => false;
 
         /// <summary>
         /// Create a new <see cref="DictionaryTokenizer"/>.
@@ -24,20 +23,26 @@
         /// set of keys expected in the dictionary are known.
         /// </param>
         /// <param name="useLenientParsing">Whether to use lenient parsing.</param>
-        public DictionaryTokenizer(bool usePdfDocEncoding, IReadOnlyList<NameToken> requiredKeys = null, bool useLenientParsing = false)
+        public DictionaryTokenizer(bool usePdfDocEncoding, IReadOnlyList<NameToken>? requiredKeys = null, bool useLenientParsing = false)
         {
             this.usePdfDocEncoding = usePdfDocEncoding;
             this.requiredKeys = requiredKeys;
             this.useLenientParsing = useLenientParsing;
         }
 
-        public bool TryTokenize(byte currentByte, IInputBytes inputBytes, out IToken token)
+        public override bool TryTokenize(IInputBytes inputBytes, [NotNullWhen(true)] out IToken? token)
         {
+            if (inputBytes.Peek() != '<' || !inputBytes.MoveNext())
+            {
+                token = null;
+                return false;
+            }
+
             var start = inputBytes.CurrentOffset;
 
             try
             {
-                return TryTokenizeInternal(currentByte, inputBytes, false, out token);
+                return TryTokenizeInternal((byte)'<', inputBytes, false, out token);
             }
             catch (PdfDocumentFormatException)
             {
@@ -50,17 +55,12 @@
 
             inputBytes.Seek(start);
 
-            return TryTokenizeInternal(currentByte, inputBytes, true, out token);
+            return TryTokenizeInternal((byte)'<', inputBytes, true, out token);
         }
 
-        private bool TryTokenizeInternal(byte currentByte, IInputBytes inputBytes, bool useRequiredKeys, out IToken token)
+        private bool TryTokenizeInternal(byte currentByte, IInputBytes inputBytes, bool useRequiredKeys, [NotNullWhen(true)] out IToken? token)
         {
             token = null;
-
-            if (currentByte != '<')
-            {
-                return false;
-            }
 
             bool foundNextOpenBrace = false;
 
@@ -94,10 +94,10 @@
                     continue;
                 }
 
-                tokens.Add(coreScanner.CurrentToken);
+                tokens.Add(coreScanner.CurrentToken!);
 
                 // Has enough key/values for each required key
-                if (useRequiredKeys && tokens.Count >= requiredKeys.Count * 2)
+                if (useRequiredKeys && tokens.Count >= requiredKeys!.Count * 2)
                 {
                     var proposedDictionary = ConvertToDictionary(tokens, useLenientParsing);
 
@@ -121,18 +121,43 @@
                 }
             }
 
-            var dictionary = ConvertToDictionary(tokens, useLenientParsing);
+            if (inputBytes.Peek() == '>')
+            {
+                // Clean dictionary close
+                inputBytes.MoveNext();
 
-            token = new DictionaryToken(dictionary);
+                if (inputBytes.Peek() == '>')
+                {
+                    inputBytes.MoveNext(); // Read the final '>' of a '<<' dictionary close. Should always be there
+                }
 
-            return true;
+                var dictionary = ConvertToDictionary(tokens, useLenientParsing);
+
+                token = new DictionaryToken(dictionary);
+
+                return true;
+            }
+            else if (/* Allow missing dictionary close && */ tokens.Count > 0) // Required for CanParseCidSystemInfoAndOtherInformationWhenMissingDictionaryClose test
+            {
+                // Missing close token but let's return what we have.
+                var dictionary = ConvertToDictionary(tokens, useLenientParsing);
+
+                token = new DictionaryToken(dictionary);
+
+                return true;
+            }
+            else
+            {
+                token = null;
+                return false;
+            }
         }
 
         private static Dictionary<NameToken, IToken> ConvertToDictionary(List<IToken> tokens, bool useLenientParsing)
         {
             var result = new Dictionary<NameToken, IToken>();
 
-            NameToken key = null;
+            NameToken? key = null;
             for (var i = 0; i < tokens.Count; i++)
             {
                 var token = tokens[i];
@@ -183,7 +208,7 @@
             return result;
         }
 
-        private static IToken PeekNext(List<IToken> tokens, int currentIndex)
+        private static IToken? PeekNext(List<IToken> tokens, int currentIndex)
         {
             if (tokens.Count - 1 < currentIndex + 1)
             {

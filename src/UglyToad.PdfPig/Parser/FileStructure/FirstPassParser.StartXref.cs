@@ -46,7 +46,7 @@ internal static partial class FirstPassParser
                 {
                     scanner.Seek(fetchFrom + lx);
 
-                    if (scanner.TryReadToken(out OperatorToken startXrefOp) && (startXrefOp.Data == "startxref" || startXrefOp.Data == "startref"))
+                    if (scanner.TryReadToken<OperatorToken>(out var startXrefOp) && (startXrefOp.Data == "startxref" || startXrefOp.Data == "startref"))
                     {
                         var pos = GetNumericTokenFollowingCurrent(scanner);
 
@@ -79,7 +79,7 @@ internal static partial class FirstPassParser
                     capturedOffset = bytes.CurrentOffset - 1;
                     break;
                 }
-                
+
                 // This can be a mangled version of the startxref operator.
                 if (buffer.EndsWith("startref"))
                 {
@@ -96,7 +96,7 @@ internal static partial class FirstPassParser
         {
             scanner.Seek(capturedOffset.Value);
 
-            if (scanner.TryReadToken(out OperatorToken startXrefOp)
+            if (scanner.TryReadToken<OperatorToken>(out var startXrefOp)
                 && (startXrefOp.Data == "startxref" || startXrefOp.Data == "startref"))
             {
                 specifiedXrefOffset = GetNumericTokenFollowingCurrent(scanner);

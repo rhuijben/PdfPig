@@ -23,7 +23,7 @@
         {
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Parser", "SimpleGoogleDocPageContent.txt");
             var content = File.ReadAllText(path);
-            var input = StringBytesTestConverter.Convert(content, false);
+            var input = StringBytesTestConverter.Convert(content);
 
             var result = parser.Parse(1, input.Bytes, log);
 
@@ -35,7 +35,7 @@
         {
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Parser", "SimpleGoogleDocPageContent.txt");
             var content = File.ReadAllText(path);
-            var input = StringBytesTestConverter.Convert(content, false);
+            var input = StringBytesTestConverter.Convert(content);
 
             var result = parser.Parse(1, input.Bytes, log);
 
@@ -68,7 +68,7 @@
 2 w
 (ABC) Tj
 ET";
-            var input = StringBytesTestConverter.Convert(s, false);
+            var input = StringBytesTestConverter.Convert(s);
 
             var result = parser.Parse(1, input.Bytes, log);
 
@@ -98,7 +98,7 @@ ET";
 2 w
 (ABC) Tj
 ET";
-            var input = StringBytesTestConverter.Convert(s, false);
+            var input = StringBytesTestConverter.Convert(s);
 
             var result = parser.Parse(1, input.Bytes, log);
 
@@ -134,7 +134,7 @@ ET";
 0 Tr
 ET";
 
-            var input = StringBytesTestConverter.Convert(s, false);
+            var input = StringBytesTestConverter.Convert(s);
 
             var result = parser.Parse(1, input.Bytes, log);
 
@@ -159,7 +159,7 @@ ET";
 cm BT 0.0001 Tc 19 0 0 19 0 0 Tm /Tc1 1 Tf (   \(sleep 1; printf ""QUIT\\r\\n""\) | )
             Tj ET Q";
 
-            var input = StringBytesTestConverter.Convert(s, false);
+            var input = StringBytesTestConverter.Convert(s);
 
             var result = parser.Parse(1, input.Bytes, log);
 
@@ -196,7 +196,7 @@ m
 151555.0
 l";
 
-            var input = StringBytesTestConverter.Convert(s, false);
+            var input = StringBytesTestConverter.Convert(s);
 
             var result = parser.Parse(1, input.Bytes, log);
 
@@ -208,7 +208,7 @@ l";
         {
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Parser", "0007511-page-2.txt");
             var content = File.ReadAllText(path);
-            var input = StringBytesTestConverter.Convert(content, false);
+            var input = StringBytesTestConverter.Convert(content);
 
             var lenientParser = new PageContentParser(ReflectionGraphicsStateOperationFactory.Instance, true);
             var result = lenientParser.Parse(1, input.Bytes, log);

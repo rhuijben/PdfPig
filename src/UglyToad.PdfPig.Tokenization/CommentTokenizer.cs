@@ -1,18 +1,17 @@
 ﻿namespace UglyToad.PdfPig.Tokenization
 {
     using Core;
+    using System.Diagnostics.CodeAnalysis;
     using System.Text;
     using Tokens;
 
-    internal sealed class CommentTokenizer : ITokenizer
+    internal sealed class CommentTokenizer : InputByteTokenizer
     {
-        public bool ReadsNextByte => false;
-
-        public bool TryTokenize(byte currentByte, IInputBytes inputBytes, out IToken token)
+        public override bool TryTokenize(IInputBytes inputBytes, [NotNullWhen(true)] out IToken? token)
         {
             token = null;
 
-            if (currentByte != '%')
+            if (inputBytes.Peek() != '%' || !inputBytes.MoveNext())
             {
                 return false;
             }

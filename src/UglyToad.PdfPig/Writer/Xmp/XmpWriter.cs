@@ -94,7 +94,7 @@ namespace UglyToad.PdfPig.Writer.Xmp
             {
                 {NameToken.Type, NameToken.Metadata},
                 {NameToken.Subtype, NameToken.Xml},
-                {NameToken.Length, new NumericToken(bytes.Length)}
+                {NameToken.Length, NumericToken.Create(bytes.Length)}
             }), bytes);
         }
 
@@ -246,7 +246,7 @@ namespace UglyToad.PdfPig.Writer.Xmp
         /// </summary>
         private static XDocument MergeXmpXdocuments(params XDocument[] xDocuments)
         {
-            XDocument document = new XDocument(xDocuments.FirstOrDefault());
+            XDocument document = new XDocument(xDocuments.First());
             foreach (XDocument xdocOriginal in xDocuments.Skip(1).Where(doc => doc != null))
             {
                 XDocument xdoc = new XDocument(xdocOriginal);

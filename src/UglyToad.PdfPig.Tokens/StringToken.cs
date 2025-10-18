@@ -6,7 +6,7 @@ namespace UglyToad.PdfPig.Tokens
     /// <summary>
     /// Represents a string of text contained in a PDF document.
     /// </summary>
-    public class StringToken : IDataToken<string>
+    public sealed class StringToken : IDataToken<string>
     {
         /// <summary>
         /// The string in the token.
@@ -104,5 +104,15 @@ namespace UglyToad.PdfPig.Tokens
             /// </summary>
             PdfDocEncoding = 3,
         }
+
+        /// <summary>
+        /// Common instance of the empty string
+        /// </summary>
+        public static readonly StringToken EmptyString = new StringToken(String.Empty);
+
+        /// <summary>
+        /// "Adobe"
+        /// </summary>
+        public static readonly StringToken Adobe = new StringToken("Adobe");
     }
 }

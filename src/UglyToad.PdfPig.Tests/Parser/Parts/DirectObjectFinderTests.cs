@@ -16,7 +16,7 @@
             var reference2 = new IndirectReference(9, 0);
 
             scanner.Objects[reference1] = new ObjectToken(10, reference1, new IndirectReferenceToken(reference2));
-            scanner.Objects[reference2] = new ObjectToken(12, reference2, new NumericToken(69));
+            scanner.Objects[reference2] = new ObjectToken(12, reference2, NumericToken.Create(69));
 
             Assert.True(DirectObjectFinder.TryGet(new IndirectReferenceToken(reference1), scanner, out NumericToken result));
 
@@ -30,7 +30,7 @@
             var reference2 = new IndirectReference(9, 0);
 
             scanner.Objects[reference1] = new ObjectToken(10, reference1, new IndirectReferenceToken(reference2));
-            scanner.Objects[reference2] = new ObjectToken(12, reference2, new NumericToken(69));
+            scanner.Objects[reference2] = new ObjectToken(12, reference2, NumericToken.Create(69));
 
             var result = DirectObjectFinder.Get<NumericToken>(reference1, scanner);
 
@@ -44,7 +44,7 @@
             var reference2 = new IndirectReference(9, 0);
 
             scanner.Objects[reference1] = new ObjectToken(10, reference1, new IndirectReferenceToken(reference2));
-            scanner.Objects[reference2] = new ObjectToken(12, reference2, new NumericToken(69));
+            scanner.Objects[reference2] = new ObjectToken(12, reference2, NumericToken.Create(69));
 
             var result = DirectObjectFinder.Get<NumericToken>(new IndirectReferenceToken(reference1), scanner);
 
@@ -93,7 +93,7 @@
 
             scanner.Objects[reference] = new ObjectToken(10, reference, new ArrayToken(new[]
             {
-                new NumericToken(5), new NumericToken(6), new NumericToken(0)   
+                NumericToken.Create(5), NumericToken.Create(6), NumericToken.Create(0)   
             }));
 
             Action action = () => DirectObjectFinder.Get<StringToken>(reference, scanner);

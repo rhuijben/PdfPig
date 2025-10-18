@@ -18,7 +18,7 @@ namespace UglyToad.PdfPig.Tests.Tokenization
         {
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.False(result);
             Assert.Null(token);
@@ -29,7 +29,7 @@ namespace UglyToad.PdfPig.Tests.Tokenization
         {
             var input = StringBytesTestConverter.Convert("< < /Name (Barry Scott) >>");
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -43,7 +43,7 @@ namespace UglyToad.PdfPig.Tests.Tokenization
         {
             var input = StringBytesTestConverter.Convert("<< /Type /Example>>");
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -57,7 +57,7 @@ namespace UglyToad.PdfPig.Tests.Tokenization
         {
              var input = StringBytesTestConverter.Convert("<< /Filter /FlateDecode /S 36 /Length 53 >>");
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -73,7 +73,7 @@ namespace UglyToad.PdfPig.Tests.Tokenization
         {
             var input = StringBytesTestConverter.Convert("<</Pages 14 0 R /Type /Catalog >>");
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -103,7 +103,7 @@ namespace UglyToad.PdfPig.Tests.Tokenization
 
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -134,7 +134,7 @@ namespace UglyToad.PdfPig.Tests.Tokenization
 endobj
 5 0 obj");
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -153,7 +153,7 @@ endobj
         {
             var input = StringBytesTestConverter.Convert(@"<< /Count 12 /Definition << /Name (Glorp)>> /Type /Catalog >>");
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -179,7 +179,7 @@ endobj
         {
             var input = StringBytesTestConverter.Convert("<< /Type /Page /Parent 4 0 R /MediaBox [ 0 0      \r\n   100.28 841.89 ] /Resources >>");
 
-            tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            tokenizer.TryTokenize(input.Bytes, out var token);
 
             var dict = AssertDictionaryToken(token);
 
@@ -217,7 +217,7 @@ endobj
 
             var input = StringBytesTestConverter.Convert(s);
 
-            Assert.True(tokenizer.TryTokenize(input.First, input.Bytes, out var token));
+            Assert.True(tokenizer.TryTokenize(input.Bytes, out var token));
 
             var dictionary = AssertDictionaryToken(token);
 

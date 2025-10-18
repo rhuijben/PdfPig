@@ -763,7 +763,7 @@ namespace UglyToad.PdfPig.Writer
 
                 if (page.Value.rotation.HasValue)
                 {
-                    pageDictionary[NameToken.Rotate] = new NumericToken(page.Value.rotation.Value);
+                    pageDictionary[NameToken.Rotate] = NumericToken.Create(page.Value.rotation.Value);
                 }
 
                 // Adobe Acrobat errors if content streams ref'd by multiple pages, turn off
@@ -823,7 +823,7 @@ namespace UglyToad.PdfPig.Writer
             for (var i = 0; i < leafs.Count; i++)
             {
                 leafs[i][NameToken.Kids] = new ArrayToken(leafChildren[i]);
-                leafs[i][NameToken.Count] = new NumericToken(leafChildren[i].Count);
+                leafs[i][NameToken.Count] = NumericToken.Create(leafChildren[i].Count);
                 leafs[i][dummyName] = leafRefs[i];
             }
 
@@ -850,7 +850,7 @@ namespace UglyToad.PdfPig.Writer
                 var outline = new Dictionary<NameToken, IToken>
                 {
                     {NameToken.Type, NameToken.Outlines},
-                    {NameToken.Count, new NumericToken(Bookmarks.Roots.Count)},
+                    {NameToken.Count, NumericToken.Create(Bookmarks.Roots.Count)},
                     {NameToken.First, bookmarks[0]},
                     {NameToken.Last, bookmarks[bookmarks.Length - 1]},
                 };
@@ -937,7 +937,7 @@ namespace UglyToad.PdfPig.Writer
                 {
                     {NameToken.Type, NameToken.Pages},
                     {NameToken.Kids, new ArrayToken(children)},
-                    {NameToken.Count, new NumericToken(count)}
+                    {NameToken.Count, NumericToken.Create(count)}
                 };
                 if (parent != null)
                 {
@@ -999,7 +999,7 @@ namespace UglyToad.PdfPig.Writer
                 var data = new Dictionary<NameToken, IToken>
                 {
                     {NameToken.Title, new StringToken(node.Title)},
-                    {NameToken.Count, new NumericToken(node.Children.Count)}
+                    {NameToken.Count, NumericToken.Create(node.Children.Count)}
                 };
 
                 if (parent != null)
@@ -1062,7 +1062,7 @@ namespace UglyToad.PdfPig.Writer
                         NameToken.XYZ,
                         new NumericToken(destination.Coordinates.Left ?? 0),
                         new NumericToken(destination.Coordinates.Top ?? 0),
-                        new NumericToken(0)
+                        NumericToken.Create(0)
                     });
 
                 case ExplicitDestinationType.FitPage:

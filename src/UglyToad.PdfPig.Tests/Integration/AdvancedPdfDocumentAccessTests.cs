@@ -16,7 +16,7 @@
                 document.Advanced.ReplaceIndirectObject(contents.Data, tk =>
                 {
                     var dict = new Dictionary<NameToken, IToken>();
-                    dict[NameToken.Length] = new NumericToken(0);
+                    dict[NameToken.Length] = NumericToken.Create(0);
                     var replaced = new StreamToken(new DictionaryToken(dict), []);
                     return replaced;
                 });
@@ -34,7 +34,7 @@
             using (var document = PdfDocument.Open(path))
             {
                 var dict = new Dictionary<NameToken, IToken>();
-                dict[NameToken.Length] = new NumericToken(0);
+                dict[NameToken.Length] = NumericToken.Create(0);
                 var replacement = new StreamToken(new DictionaryToken(dict), []);
 
                 var pg = document.Structure.Catalog.Pages.GetPageNode(1).NodeDictionary;

@@ -42,7 +42,7 @@
             var dictionary = new DictionaryToken(new Dictionary<NameToken, IToken> {
                 { NameToken.Registry, new StringToken("Adobe") },
                 { NameToken.Ordering, new StringToken("UCS") },
-                { NameToken.Supplement, new NumericToken(0) }
+                { NameToken.Supplement, NumericToken.Create(0) }
             });
 
             TokenWriter.WriteToken(dictionary, memoryStream);

@@ -26,8 +26,8 @@
             var compressed = CompressBytes(bytes);
             var stream = new StreamToken(new DictionaryToken(new Dictionary<NameToken, IToken>
             {
-                { NameToken.Length, new NumericToken(compressed.Length) },
-                { NameToken.Length1, new NumericToken(bytes.Length) },
+                { NameToken.Length, NumericToken.Create(compressed.Length) },
+                { NameToken.Length1, NumericToken.Create(bytes.Length) },
                 { NameToken.Filter, new ArrayToken(new []{ NameToken.FlateDecode }) }
             }), compressed);
 

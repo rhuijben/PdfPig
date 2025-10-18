@@ -718,7 +718,7 @@ endobj";
 
         private static PdfTokenScanner GetScanner(string s, TestObjectLocationProvider locationProvider = null, bool useLenientParsing = false)
         {
-            var input = StringBytesTestConverter.Convert(s, false);
+            var input = StringBytesTestConverter.Convert(s);
 
             return new PdfTokenScanner(input.Bytes, locationProvider ?? new TestObjectLocationProvider(),
                 new TestFilterProvider(), NoOpEncryptionHandler.Instance, useLenientParsing ? new ParsingOptions() : ParsingOptions.LenientParsingOff);

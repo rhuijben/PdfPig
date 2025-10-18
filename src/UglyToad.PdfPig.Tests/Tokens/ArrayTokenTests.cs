@@ -42,7 +42,7 @@
             var token = new ArrayToken(new IToken[]
             {
                 new StringToken("hedgehog"),
-                new NumericToken(7),
+                NumericToken.Create(7),
                 OperatorToken.StartObject
             });
 

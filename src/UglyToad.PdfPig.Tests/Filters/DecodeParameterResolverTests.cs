@@ -35,9 +35,9 @@
             var filter = NameToken.CcittfaxDecode;
             var filterParameters = new DictionaryToken(new Dictionary<NameToken, IToken>
             {
-                { NameToken.K, new NumericToken(-1) },
-                { NameToken.Columns, new NumericToken(1800) },
-                { NameToken.Rows, new NumericToken(3113) },
+                { NameToken.K, NumericToken.Create(-1) },
+                { NameToken.Columns, NumericToken.Create(1800) },
+                { NameToken.Rows, NumericToken.Create(3113) },
                 { NameToken.BlackIs1, BooleanToken.True }
             });
 
@@ -58,9 +58,9 @@
             var filter = NameToken.CcittfaxDecode;
             var filterParameters = new DictionaryToken(new Dictionary<NameToken, IToken>
             {
-                { NameToken.K, new NumericToken(-1) },
-                { NameToken.Columns, new NumericToken(1800) },
-                { NameToken.Rows, new NumericToken(3113) },
+                { NameToken.K, NumericToken.Create(-1) },
+                { NameToken.Columns, NumericToken.Create(1800) },
+                { NameToken.Rows, NumericToken.Create(3113) },
                 { NameToken.BlackIs1, BooleanToken.True }
             });
 
@@ -84,9 +84,9 @@
             var filter2 = NameToken.CcittfaxDecode;
             var filter2Parameters = new DictionaryToken(new Dictionary<NameToken, IToken>
             {
-                { NameToken.K, new NumericToken(-1) },
-                { NameToken.Columns, new NumericToken(1800) },
-                { NameToken.Rows, new NumericToken(3113) },
+                { NameToken.K, NumericToken.Create(-1) },
+                { NameToken.Columns, NumericToken.Create(1800) },
+                { NameToken.Rows, NumericToken.Create(3113) },
                 { NameToken.BlackIs1, BooleanToken.True }
 
             });
@@ -111,9 +111,9 @@
             var filter2 = NameToken.CcittfaxDecode;
             var filter2Parameters = new DictionaryToken(new Dictionary<NameToken, IToken>
             {
-                { NameToken.K, new NumericToken(-1) },
-                { NameToken.Columns, new NumericToken(1800) },
-                { NameToken.Rows, new NumericToken(3113) },
+                { NameToken.K, NumericToken.Create(-1) },
+                { NameToken.Columns, NumericToken.Create(1800) },
+                { NameToken.Rows, NumericToken.Create(3113) },
                 { NameToken.BlackIs1, BooleanToken.True }
             });
 

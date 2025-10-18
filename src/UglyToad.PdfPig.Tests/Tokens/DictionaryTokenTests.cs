@@ -62,7 +62,7 @@ namespace UglyToad.PdfPig.Tests.Tokens
         {
             var dictionary = new DictionaryToken(new Dictionary<NameToken, IToken>
             {
-                { NameToken.Create("Fish"), new NumericToken(420) },
+                { NameToken.Create("Fish"), NumericToken.Create(420) },
                 { NameToken.Create("Registry"), new StringToken("None") }
             });
 

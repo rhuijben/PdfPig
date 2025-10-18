@@ -65,7 +65,7 @@ startxref
         [Fact]
         public void ReaderOnlyCallsOnce()
         {
-            var reader = StringBytesTestConverter.Convert(TestData, false);
+            var reader = StringBytesTestConverter.Convert(TestData);
 
             var locations = BruteForceSearcher.GetObjectLocations(reader.Bytes);
 

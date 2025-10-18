@@ -1,27 +1,25 @@
 ﻿namespace UglyToad.PdfPig.Tokenization
 {
-    using System.Collections.Generic;
     using Core;
     using Scanner;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using Tokens;
 
-    internal sealed class ArrayTokenizer : ITokenizer
+    internal sealed class ArrayTokenizer : InputByteTokenizer
     {
         private readonly bool usePdfDocEncoding;
-
-        public bool ReadsNextByte => false;
 
         public ArrayTokenizer(bool usePdfDocEncoding)
         {
             this.usePdfDocEncoding = usePdfDocEncoding;
         }
 
-        public bool TryTokenize(byte currentByte, IInputBytes inputBytes, out IToken token)
+        public override bool TryTokenize(IInputBytes inputBytes, [NotNullWhen(true)] out IToken? token)
         {
-            token = null;
-
-            if (currentByte != '[')
+            if (inputBytes.Peek() != '[' || !inputBytes.MoveNext())
             {
+                token = null;
                 return false;
             }
 
@@ -29,8 +27,8 @@
 
             var contents = new List<IToken>();
 
-            IToken previousToken = null;
-            while (!CurrentByteEndsCurrentArray(inputBytes, previousToken) && scanner.MoveNext())
+            IToken? previousToken = null;
+            while (scanner.MoveNext())
             {
                 previousToken = scanner.CurrentToken;
 
@@ -39,22 +37,21 @@
                     continue;
                 }
                 
-                contents.Add(scanner.CurrentToken);
+                contents.Add(scanner.CurrentToken!);
             }
 
-            token = new ArrayToken(contents);
-
-            return true;
-        }
-
-        private static bool CurrentByteEndsCurrentArray(IInputBytes inputBytes, IToken previousToken)
-        {
-            if (inputBytes.CurrentByte == ']' && !(previousToken is ArrayToken))
+            if (inputBytes.Peek() == ']')
             {
+                inputBytes.MoveNext(); // Read that ']' character.
+                token = new ArrayToken(contents);
+
                 return true;
             }
-
-            return false;
+            else
+            {
+                token = null;
+                return false;
+            }
         }
     }
 }

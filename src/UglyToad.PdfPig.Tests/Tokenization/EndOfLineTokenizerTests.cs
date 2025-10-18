@@ -10,7 +10,7 @@
         [Fact]
         public void CurrentByteIsNotEndOfLineFalse()
         {
-            var input = StringBytesTestConverter.Convert("\r something \n", false);
+            var input = StringBytesTestConverter.Convert("\r something \n");
 
             var result = tokenizer.TryTokenize((byte)'\0', input.Bytes, out var _);
 
@@ -20,7 +20,7 @@
         [Fact]
         public void CurrentByteIsCarriageReturnTrue()
         {
-            var input = StringBytesTestConverter.Convert("\r", false);
+            var input = StringBytesTestConverter.Convert("\r");
 
             var result = tokenizer.TryTokenize((byte)'\r', input.Bytes, out var token);
 
@@ -32,7 +32,7 @@
         [Fact]
         public void CurrentByteIsEndOfLineTrue()
         {
-            var input = StringBytesTestConverter.Convert("\n", false);
+            var input = StringBytesTestConverter.Convert("\n");
 
             var result = tokenizer.TryTokenize((byte)'\n', input.Bytes, out var token);
 

@@ -73,7 +73,7 @@ internal static class XrefBruteForcer
 
                     numberByteBuffer.Clear();
                 }
-                
+
                 inNum = false;
                 lastWhitespace = false;
 
@@ -193,7 +193,7 @@ internal static class XrefBruteForcer
                 ClearQueues();
 
                 // Grab the last trailer dictionary as backup in case we find no valid xrefs.
-                if (scanner.TryReadToken(out DictionaryToken trailerDict))
+                if (scanner.TryReadToken<DictionaryToken>(out var trailerDict))
                 {
                     trailer = trailerDict;
                 }

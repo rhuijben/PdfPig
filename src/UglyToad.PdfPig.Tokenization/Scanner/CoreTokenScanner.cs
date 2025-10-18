@@ -1,8 +1,9 @@
 ﻿namespace UglyToad.PdfPig.Tokenization.Scanner
 {
+    using Core;
     using System;
     using System.Collections.Generic;
-    using Core;
+    using System.Diagnostics.CodeAnalysis;
     using Tokens;
 
     /// <summary>
@@ -21,10 +22,10 @@
         private readonly DictionaryTokenizer dictionaryTokenizer;
 
         private readonly ScannerScope scope;
-        private readonly IReadOnlyDictionary<NameToken, IReadOnlyList<NameToken>> namedDictionaryRequiredKeys;
+        private readonly IReadOnlyDictionary<NameToken, IReadOnlyList<NameToken>>? namedDictionaryRequiredKeys;
         private readonly IInputBytes inputBytes;
         private readonly bool usePdfDocEncoding;
-        private readonly List<(byte firstByte, ITokenizer tokenizer)> customTokenizers = new List<(byte, ITokenizer)>();
+        private readonly List<(byte firstByte, InputByteTokenizer tokenizer)> customTokenizers = new List<(byte, InputByteTokenizer)>();
         private readonly bool useLenientParsing;
 
         /// <summary>
@@ -33,7 +34,7 @@
         public long CurrentTokenStart { get; private set; }
 
         /// <inheritdoc />
-        public IToken CurrentToken { get; private set; }
+        public IToken? CurrentToken { get; private set; }
 
         /// <inheritdoc />
         public long CurrentPosition => inputBytes.CurrentOffset;
@@ -41,7 +42,6 @@
         /// <inheritdoc />
         public long Length => inputBytes.Length;
 
-        private bool hasBytePreRead;
         private bool isInInlineImage;
         /// <summary>
         /// '%' only identifies comments outside of PDF streams and strings, inside these we should ignore it.
@@ -59,7 +59,7 @@
             IInputBytes inputBytes,
             bool usePdfDocEncoding,
             ScannerScope scope = ScannerScope.None,
-            IReadOnlyDictionary<NameToken, IReadOnlyList<NameToken>> namedDictionaryRequiredKeys = null,
+            IReadOnlyDictionary<NameToken, IReadOnlyList<NameToken>>? namedDictionaryRequiredKeys = null,
             bool useLenientParsing = false,
             bool isStream = false)
         {
@@ -75,7 +75,7 @@
         }
 
         /// <inheritdoc />
-        public bool TryReadToken<T>(out T token) where T : class, IToken
+        public bool TryReadToken<T>([NotNullWhen(true)] out T? token) where T : class, IToken
         {
             token = default(T);
 
@@ -102,14 +102,11 @@
         /// <inheritdoc />
         public bool MoveNext()
         {
-            var endAngleBracesRead = 0;
-
             bool isSkippingLine = false;
             bool isSkippingSymbol = false;
-            while ((hasBytePreRead && !inputBytes.IsAtEnd()) || inputBytes.MoveNext())
+            while (!inputBytes.IsAtEnd())
             {
-                hasBytePreRead = false;
-                var currentByte = inputBytes.CurrentByte;
+                var currentByte = inputBytes.Peek() ?? 0;
                 var c = (char) currentByte;
 
                 if (isSkippingLine)
@@ -117,13 +114,15 @@
                     if (ReadHelper.IsEndOfLine(c))
                     {
                         isSkippingLine = false;
-                        continue;
                     }
+
+                    if (!inputBytes.MoveNext())
+                        return false;
 
                     continue;
                 }
 
-                ITokenizer tokenizer = null;
+                InputByteTokenizer? tokenizer = null;
                 foreach (var customTokenizer in customTokenizers)
                 {
                     if (currentByte == customTokenizer.firstByte)
@@ -138,18 +137,27 @@
                     if (ReadHelper.IsWhitespace(currentByte) || char.IsControl(c))
                     {
                         isSkippingSymbol = false;
+
+                        if (!inputBytes.MoveNext())
+                            return false;
                         continue;
                     }
 
                     if (currentByte == (byte)'%' && isStream)
                     {
                         isSkippingLine = true;
+
+                        if (!inputBytes.MoveNext())
+                            return false;
                         continue;
                     }
 
                     // If we failed to read the symbol for whatever reason we pass over it.
                     if (isSkippingSymbol && c != '>')
                     {
+                        if (!inputBytes.MoveNext())
+                            return false;
+
                         continue;
                     }
 
@@ -159,8 +167,22 @@
                             tokenizer = stringTokenizer;
                             break;
                         case '<':
-                            var following = inputBytes.Peek();
-                            if (following == '<')
+                            var peek = inputBytes.PeekBuffer();
+                            byte followingByte;
+
+                            if (peek.Length >= 2)
+                            {
+                                followingByte = peek.Span[1];
+                            }
+                            else
+                            {
+                                // Force reading. Should never be necessary except at EOF
+                                inputBytes.MoveNext();
+                                followingByte = inputBytes.Peek() ?? 0;
+                                inputBytes.Seek(inputBytes.CurrentOffset - 1);
+                            }
+
+                            if (followingByte == '<')
                             {
                                 isSkippingSymbol = true;
                                 tokenizer = dictionaryTokenizer;
@@ -178,12 +200,7 @@
                             }
                             break;
                         case '>' when scope == ScannerScope.Dictionary:
-                            endAngleBracesRead++;
-                            if (endAngleBracesRead == 2)
-                            {
-                                return false;
-                            }
-                            break;
+                            return false;
                         case '[':
                             tokenizer = arrayTokenizer;
                             break;
@@ -216,12 +233,14 @@
                     }
                 }
 
-                CurrentTokenStart = inputBytes.CurrentOffset - 1;
+                CurrentTokenStart = inputBytes.CurrentOffset;
 
-                if (tokenizer == null || !tokenizer.TryTokenize(currentByte, inputBytes, out var token))
+                if (tokenizer == null || !tokenizer.TryTokenize(inputBytes, out var token))
                 {
                     isSkippingSymbol = true;
-                    hasBytePreRead = false;
+
+                    if (!inputBytes.MoveNext())
+                        return false;
                     continue;
                 }
 
@@ -237,18 +256,11 @@
                         var imageData = ReadInlineImageData();
                         isInInlineImage = false;
                         CurrentToken = new InlineImageDataToken(new Memory<byte>([..imageData]));
-                        hasBytePreRead = false;
                         return true;
                     }
                 }
 
                 CurrentToken = token;
-
-                /* 
-                 * Some tokenizers need to read the symbol of the next token to know if they have ended
-                 * so we don't want to move on to the next byte, we would lose a byte, e.g.: /NameOne/NameTwo or /Name(string)
-                 */
-                hasBytePreRead = tokenizer.ReadsNextByte;
 
                 return true;
             }
@@ -264,7 +276,7 @@
                 throw new ArgumentNullException(nameof(tokenizer));
             }
 
-            customTokenizers.Add((firstByte, tokenizer));
+            customTokenizers.Add((firstByte, InputByteTokenizer.CreateFrom(tokenizer)));
         }
 
         /// <inheritdoc />

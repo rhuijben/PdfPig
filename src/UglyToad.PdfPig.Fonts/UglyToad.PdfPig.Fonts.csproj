@@ -26,6 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\pdfpig.snk" Link="pdfpig.snk" />
+    <Compile Include="..\UglyToad.PdfPig\Polyfills\*.cs" Visible="false" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\UglyToad.PdfPig.Core\UglyToad.PdfPig.Core.csproj" />

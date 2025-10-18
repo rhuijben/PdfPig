@@ -7,10 +7,10 @@
     /// <summary>
     /// An operator token encountered in a page content or Adobe Type 1 font stream.
     /// </summary>
-    public class OperatorToken : IDataToken<string>
+    public sealed class OperatorToken : IDataToken<string>
     {
-        private static readonly object Lock = new object();
-        private static readonly Dictionary<string, string> PooledNames = new Dictionary<string, string>();
+        private static readonly object Lock = new();
+        private static readonly Dictionary<string, OperatorToken> PooledInstances = new Dictionary<string, OperatorToken>();
 
         /// <summary>
         /// Begin text.
@@ -127,18 +127,22 @@
 
         private OperatorToken(string data)
         {
-            string stored;
+            Data = data;
+        }
 
+        private static OperatorToken GetInstance(string data)
+        {
             lock (Lock)
             {
-                if (!PooledNames.TryGetValue(data, out stored))
+                if (PooledInstances.TryGetValue(data, out var stored))
                 {
-                    stored = data;
-                    PooledNames[data] = stored;
+                    return stored;
+                }
+                else
+                {
+                    return PooledInstances[data] = new(data);
                 }
             }
-
-            Data = stored;
         }
 
         /// <summary>
@@ -169,7 +173,7 @@
                 "W*" => WStar,
                 "xref" => Xref,
                 "startxref" => StartXref,
-                _ => new OperatorToken(data.ToString())
+                _ => GetInstance(data.ToString())
             };
         }
 
@@ -181,7 +185,7 @@
                 return true;
             }
 
-            if (!(obj is OperatorToken other))
+            if (obj is not OperatorToken other)
             {
                 return false;
             }

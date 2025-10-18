@@ -57,7 +57,7 @@ endbfchar";
         [Fact]
         public void CanParseCidSystemInfoAndOtherInformation()
         {
-            var input = StringBytesTestConverter.Convert(GoogleDocToUnicodeCmap, false);
+            var input = StringBytesTestConverter.Convert(GoogleDocToUnicodeCmap);
 
             var cmap = cMapParser.Parse(input.Bytes);
 
@@ -72,7 +72,7 @@ endbfchar";
         [Fact]
         public void CanParseCidSystemInfoAndOtherInformationWhenMissingDictionaryClose()
         {
-            var input = StringBytesTestConverter.Convert(CmapMissingDictionaryEndToken, false);
+            var input = StringBytesTestConverter.Convert(CmapMissingDictionaryEndToken);
 
             var cmap = cMapParser.Parse(input.Bytes);
 
@@ -84,7 +84,7 @@ endbfchar";
         [Fact]
         public void CanParseCodespaceRange()
         {
-            var input = StringBytesTestConverter.Convert(GoogleDocToUnicodeCmap, false);
+            var input = StringBytesTestConverter.Convert(GoogleDocToUnicodeCmap);
 
             var cmap = cMapParser.Parse(input.Bytes);
 
@@ -98,7 +98,7 @@ endbfchar";
         [Fact]
         public void CanParseBaseFontCharacters()
         {
-            var input = StringBytesTestConverter.Convert(GoogleDocToUnicodeCmap, false);
+            var input = StringBytesTestConverter.Convert(GoogleDocToUnicodeCmap);
 
             var cmap = cMapParser.Parse(input.Bytes);
 
@@ -200,7 +200,7 @@ endbfchar";
                 end
                 """;
 
-            var input = StringBytesTestConverter.Convert(cmap, false);
+            var input = StringBytesTestConverter.Convert(cmap);
 
             var result = cMapParser.Parse(input.Bytes);
 

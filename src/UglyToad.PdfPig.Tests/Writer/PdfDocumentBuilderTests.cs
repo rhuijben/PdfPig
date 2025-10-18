@@ -145,14 +145,18 @@
                 });
                 results = output.Build();
                 var pg = existing.GetPage(1);
+#pragma warning disable CS0618 // Type or member is obsolete
                 var annots = pg.ExperimentalAccess.GetAnnotations().ToList();
+#pragma warning restore CS0618 // Type or member is obsolete
                 Assert.NotEmpty(annots);
             }
 
             using (var rewritten = PdfDocument.Open(results, ParsingOptions.LenientParsingOff))
             {
                 var pg = rewritten.GetPage(1);
+#pragma warning disable CS0618 // Type or member is obsolete
                 var annots = pg.ExperimentalAccess.GetAnnotations().ToList();
+#pragma warning restore CS0618 // Type or member is obsolete
                 Assert.Empty(annots);
             }
         }

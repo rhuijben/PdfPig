@@ -7,6 +7,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\pdfpig.snk</AssemblyOriginatorKeyFile>
+    <Nullable>annotations</Nullable>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net462'">
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
@@ -16,6 +17,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\pdfpig.snk" Link="pdfpig.snk" />
+    <Compile Include="..\UglyToad.PdfPig\Polyfills\*.cs" Visible="false" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\UglyToad.PdfPig.Core\UglyToad.PdfPig.Core.csproj" />

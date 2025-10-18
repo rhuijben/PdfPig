@@ -19,8 +19,8 @@
 
             var profileStreamDictionary = new Dictionary<NameToken, IToken>
             {
-                {NameToken.Length, new NumericToken(compressedBytes.Length)},
-                {NameToken.N, new NumericToken(3)},
+                {NameToken.Length, NumericToken.Create(compressedBytes.Length)},
+                {NameToken.N, NumericToken.Create(3)},
                 {NameToken.Filter, NameToken.FlateDecode}
             };
 

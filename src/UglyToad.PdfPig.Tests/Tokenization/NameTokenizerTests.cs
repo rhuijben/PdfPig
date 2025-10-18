@@ -14,7 +14,7 @@
 
             var input = StringBytesTestConverter.Convert(s);
             
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
             
@@ -28,7 +28,7 @@
 
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -42,7 +42,7 @@
 
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var _);
+            var result = tokenizer.TryTokenize(input.Bytes, out var _);
 
             Assert.False(result);
         }
@@ -54,7 +54,7 @@
 
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -68,7 +68,7 @@
 
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -87,7 +87,7 @@
         {
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -104,7 +104,7 @@
         {
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -116,7 +116,7 @@
         {
             var input = StringBytesTestConverter.Convert("/Invalid#AZBadHex");
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -128,7 +128,7 @@
         {
             var input = StringBytesTestConverter.Convert("/Invalid#Z");
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -140,7 +140,7 @@
         {
             var input = StringBytesTestConverter.Convert("/Hex#/Name");
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 

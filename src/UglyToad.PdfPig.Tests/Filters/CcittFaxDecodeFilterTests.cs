@@ -14,17 +14,17 @@
             var filter = new CcittFaxDecodeFilter();
             var dictionary = new Dictionary<NameToken, IToken>
             {
-                { NameToken.D, new ArrayToken(new []{ new NumericToken(1), new NumericToken(0) })},
-                { NameToken.W, new NumericToken(1800) },
-                { NameToken.H, new NumericToken(3113) },
-                { NameToken.Bpc, new NumericToken(1) },
+                { NameToken.D, new ArrayToken(new []{ NumericToken.Create(1), NumericToken.Create(0) })},
+                { NameToken.W, NumericToken.Create(1800) },
+                { NameToken.H, NumericToken.Create(3113) },
+                { NameToken.Bpc, NumericToken.Create(1) },
                 { NameToken.F, NameToken.CcittfaxDecode },
                 { NameToken.DecodeParms,
                     new DictionaryToken(new Dictionary<NameToken, IToken>
                     {
-                        { NameToken.K, new NumericToken(-1) },
-                        { NameToken.Columns, new NumericToken(1800) },
-                        { NameToken.Rows, new NumericToken(3113) },
+                        { NameToken.K, NumericToken.Create(-1) },
+                        { NameToken.Columns, NumericToken.Create(1800) },
+                        { NameToken.Rows, NumericToken.Create(3113) },
                         { NameToken.BlackIs1, BooleanToken.True }
                     })
                 }

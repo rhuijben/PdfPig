@@ -12,7 +12,7 @@
         {
             var input = StringBytesTestConverter.Convert("null ");
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -24,7 +24,7 @@
         {
             var input = StringBytesTestConverter.Convert("    something");
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.False(result);
 

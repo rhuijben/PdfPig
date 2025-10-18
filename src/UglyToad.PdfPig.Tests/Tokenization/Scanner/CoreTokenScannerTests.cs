@@ -21,7 +21,7 @@ namespace UglyToad.PdfPig.Tests.Tokenization.Scanner
 
             var tokens = new List<IToken>();
 
-            var scanner = scannerFactory(StringBytesTestConverter.Convert(s, false).Bytes);
+            var scanner = scannerFactory(StringBytesTestConverter.Convert(s).Bytes);
 
             while (scanner.MoveNext())
             {
@@ -46,7 +46,7 @@ namespace UglyToad.PdfPig.Tests.Tokenization.Scanner
 
             var tokens = new List<IToken>();
 
-            var scanner = scannerFactory(StringBytesTestConverter.Convert(s, false).Bytes);
+            var scanner = scannerFactory(StringBytesTestConverter.Convert(s).Bytes);
 
             while (scanner.MoveNext())
             {
@@ -74,7 +74,7 @@ endobj";
 
             var tokens = new List<IToken>();
 
-            var scanner = scannerFactory(StringBytesTestConverter.Convert(s, false).Bytes);
+            var scanner = scannerFactory(StringBytesTestConverter.Convert(s).Bytes);
 
             while (scanner.MoveNext())
             {
@@ -95,7 +95,7 @@ endobj";
 
             var tokens = new List<IToken>();
 
-            var scanner = scannerFactory(StringBytesTestConverter.Convert(s, false).Bytes);
+            var scanner = scannerFactory(StringBytesTestConverter.Convert(s).Bytes);
 
             while (scanner.MoveNext())
             {
@@ -124,7 +124,7 @@ endobj";
 
             var tokens = new List<IToken>();
 
-            var scanner = scannerFactory(StringBytesTestConverter.Convert(s, false).Bytes);
+            var scanner = scannerFactory(StringBytesTestConverter.Convert(s).Bytes);
 
             while (scanner.MoveNext())
             {
@@ -152,7 +152,7 @@ endobj";
 
             var tokens = new List<IToken>();
 
-            var scanner = scannerFactory(StringBytesTestConverter.Convert(s, false).Bytes);
+            var scanner = scannerFactory(StringBytesTestConverter.Convert(s).Bytes);
 
             while (scanner.MoveNext())
             {
@@ -176,7 +176,7 @@ endobj";
 
             var tokens = new List<IToken>();
 
-            var scanner = scannerFactory(StringBytesTestConverter.Convert(content, false).Bytes);
+            var scanner = scannerFactory(StringBytesTestConverter.Convert(content).Bytes);
 
             while (scanner.MoveNext())
             {
@@ -230,7 +230,7 @@ endobj";
             var tokens = new List<IToken>();
 
             var scanner = new CoreTokenScanner(
-                StringBytesTestConverter.Convert(content, false).Bytes,
+                StringBytesTestConverter.Convert(content).Bytes,
                 true,
                 isStream: true);
 
@@ -246,7 +246,7 @@ endobj";
             tokens.Clear();
 
             var nonStreamScanner = new CoreTokenScanner(
-                StringBytesTestConverter.Convert(content, false).Bytes,
+                StringBytesTestConverter.Convert(content).Bytes,
                 true,
                 isStream: false);
 
@@ -292,7 +292,7 @@ endobj";
             var tokens = new List<IToken>();
 
             var scanner = new CoreTokenScanner(
-                StringBytesTestConverter.Convert(content, false).Bytes,
+                StringBytesTestConverter.Convert(content).Bytes,
                 true,
                 isStream: true);
 
@@ -302,9 +302,9 @@ endobj";
             }
         }
 
-        private static void AssertCorrectToken<T, TData>(IToken token, TData expected) where T : IDataToken<TData>
+        private static void AssertCorrectToken<T, TData>(IToken token, TData expected) where T : class, IDataToken<TData>
         {
-            var cast = Assert.IsType<T>(token);
+            var cast = token as T;
 
             Assert.Equal(expected, cast.Data);
         }

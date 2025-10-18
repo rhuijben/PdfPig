@@ -85,8 +85,8 @@
 
             var paramsDict = new DictionaryToken(new Dictionary<NameToken, IToken>
             {
-                { NameToken.Predictor, new NumericToken(12) },
-                { NameToken.Columns, new NumericToken(4) }
+                { NameToken.Predictor, NumericToken.Create(12) },
+                { NameToken.Columns, NumericToken.Create(4) }
             });
 
             var dictionary = new DictionaryToken(new Dictionary<NameToken, IToken>

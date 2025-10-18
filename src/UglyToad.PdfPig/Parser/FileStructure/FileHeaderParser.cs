@@ -139,6 +139,11 @@
                 }
 
                 currentOffset += readLength - versionLength;
+                if (currentOffset < 0)
+                {
+                    return false;
+                }
+
                 inputBytes.Seek(currentOffset);
             } while (readLength == bufferLength);
 

@@ -92,17 +92,17 @@
         {
             if (!dictionary.TryGet(NameToken.Registry, out var registry) || !(registry is StringToken registryString))
             {
-                registryString = new StringToken("Adobe");
+                registryString = StringToken.Adobe;
             }
 
             if (!dictionary.TryGet(NameToken.Ordering, out var ordering) || !(ordering is StringToken orderingString))
             {
-                orderingString = new StringToken(string.Empty);
+                orderingString = StringToken.EmptyString;
             }
 
             if (!dictionary.TryGet(NameToken.Supplement, out var supplement) || !(supplement is NumericToken supplementNumeric))
             {
-                supplementNumeric = new NumericToken(0);
+                supplementNumeric = NumericToken.Zero;
             }
 
             return new CharacterIdentifierSystemInfo(registryString.Data, orderingString.Data, supplementNumeric.Int);

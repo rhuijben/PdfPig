@@ -20,7 +20,7 @@
         {
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.False(result);
             Assert.Null(token);
@@ -68,7 +68,7 @@
         {
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
             if (tolerance.HasValue)
@@ -86,15 +86,12 @@
         {
             var input = StringBytesTestConverter.Convert("135.6654/Type");
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
             Assert.Equal(135.6654, AssertNumericToken(token).Data);
 
-            if (tokenizer.ReadsNextByte)
-                Assert.Equal('/', (char)input.Bytes.CurrentByte);
-            else
-                Assert.Equal('4', (char)input.Bytes.CurrentByte);
+            Assert.Equal('4', (char)input.Bytes.CurrentByte);
         }
 
         [Fact]
@@ -102,7 +99,7 @@
         {
             var input = StringBytesTestConverter.Convert("-");
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
             Assert.Equal(0, AssertNumericToken(token).Data);
@@ -114,7 +111,7 @@
             // This is a really weird format but seen in the wild. PDF, shine on, you crazy diamond.
             var input = StringBytesTestConverter.Convert("--10.25");
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
             Assert.Equal(-10.25, AssertNumericToken(token).Data);
@@ -125,7 +122,7 @@
         {
             var input = StringBytesTestConverter.Convert(".");
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
             Assert.Equal(0, AssertNumericToken(token).Data);
@@ -134,7 +131,8 @@
         private static NumericToken AssertNumericToken(IToken token)
         {
             Assert.NotNull(token);
-            var result = Assert.IsType<NumericToken>(token);
+            var result = token as NumericToken;
+            Assert.True(result is not null, "Value is not NumericToken");
 
             return result;
         }

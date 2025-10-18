@@ -253,7 +253,7 @@
             var trailerDictionaryData = new Dictionary<NameToken, IToken>
             {
                 // 1 for the free entry.
-                {NameToken.Size, new NumericToken(objectOffsets.Count + 1)},
+                {NameToken.Size, NumericToken.Create(objectOffsets.Count + 1)},
                 {NameToken.Root, new IndirectReferenceToken(catalogToken)},
                 {NameToken.Id, identifier}
             };

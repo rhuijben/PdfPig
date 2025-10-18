@@ -148,12 +148,10 @@ internal static class XrefStreamParser
         }
     }
 
-    /// <summary>
-    /// The provided offset can frequently be close but not quite correct.
-    /// The 2 most common failure modes are that the PDF content starts at some
-    /// non-zero offset in the file so all content is shifted by <param name="fileHeaderOffset"/> bytes
-    /// or we're within a few bytes of the offset but not directly at it.
-    /// </summary>
+    // The provided offset can frequently be close but not quite correct.
+    // The 2 most common failure modes are that the PDF content starts at some
+    // non-zero offset in the file so all content is shifted by <param name="fileHeaderOffset"/> bytes
+    // or we're within a few bytes of the offset but not directly at it.
     private static (long correctOffset, XrefOffsetCorrection correctionType)? TryRecoverOffset(
         FileHeaderOffset fileHeaderOffset,
         long xrefOffset,
@@ -333,11 +331,11 @@ internal static class XrefStreamParser
         dictionary = null;
 
         scanner.Seek(offset);
-        if (scanner.TryReadToken(out NumericToken _)
-            && scanner.TryReadToken(out NumericToken _)
-            && scanner.TryReadToken(out OperatorToken opToken)
+        if (scanner.TryReadToken<NumericToken>(out _)
+            && scanner.TryReadToken<NumericToken>(out _)
+            && scanner.TryReadToken<OperatorToken>(out var opToken)
             && ReferenceEquals(opToken, OperatorToken.StartObject)
-            && scanner.TryReadToken(out DictionaryToken dictToken))
+            && scanner.TryReadToken<DictionaryToken>(out var dictToken))
         {
             dictionary = dictToken;
             return true;

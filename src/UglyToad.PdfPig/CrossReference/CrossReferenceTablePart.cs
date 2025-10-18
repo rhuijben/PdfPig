@@ -56,7 +56,7 @@
         public void FixOffset(long offset)
         {
             Offset = offset;
-            Dictionary = Dictionary.With(NameToken.Prev, new NumericToken((double)offset));
+            Dictionary = Dictionary.With(NameToken.Prev, NumericToken.Create(offset));
         }
 
         public long GetPreviousOffset()

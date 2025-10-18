@@ -37,7 +37,7 @@ public class FirstPassParserTests
             %%EOF
             """;
 
-        var ib = StringBytesTestConverter.Convert(content, false);
+        var ib = StringBytesTestConverter.Convert(content);
 
         var results = FirstPassParser.Parse(
             new FileHeaderOffset(0),
@@ -47,7 +47,7 @@ public class FirstPassParserTests
         Assert.Equal(2, results.Parts.Count);
         Assert.NotNull(results.Trailer);
 
-        Assert.Equal(results.XrefOffsets[new IndirectReference(8, 0)], 500);
+        Assert.Equal(500, results.XrefOffsets[new IndirectReference(8, 0)]);
     }
 
     [Fact]
@@ -112,7 +112,7 @@ public class FirstPassParserTests
         // Handle "\r\n" or "\n" in the sourcecode in the same way
         content = content.Replace("\r\n", "\n").Replace("\n", "\r\n");
 
-        var ib = StringBytesTestConverter.Convert(content, false);
+        var ib = StringBytesTestConverter.Convert(content);
 
         var results = FirstPassParser.Parse(new FileHeaderOffset(0), ib.Bytes, new CoreTokenScanner(ib.Bytes, true));
 

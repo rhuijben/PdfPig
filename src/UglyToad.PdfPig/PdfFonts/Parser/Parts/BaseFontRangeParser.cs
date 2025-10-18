@@ -16,7 +16,7 @@
             for (var i = 0; i < numberOfOperations.Int; i++)
             {
                 // The start of the input code range.
-                if (!scanner.TryReadToken(out HexToken lowSourceCode))
+                if (!scanner.TryReadToken<HexToken>(out var lowSourceCode))
                 {
                     // Allow a miscount.
                     if (scanner.CurrentToken is OperatorToken ot &&
@@ -29,7 +29,7 @@
                 }
 
                 // The inclusive end of the input code range.
-                if (!scanner.TryReadToken(out HexToken highSourceCode))
+                if (!scanner.TryReadToken<HexToken>(out var highSourceCode))
                 {
                     throw new InvalidFontFormatException($"bfrange was missing the high source code: {scanner.CurrentToken}");
                 }

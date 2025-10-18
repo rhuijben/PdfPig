@@ -11,7 +11,8 @@
         [Fact]
         public void NullInput_ReturnsFalse()
         {
-            var result = tokenizer.TryTokenize((byte) 'A', null, out var _);
+            var input = new MemoryInputBytes(new[] { (byte)'A' });
+            var result = tokenizer.TryTokenize(input, out var _);
 
             Assert.False(result);
         }
@@ -31,7 +32,7 @@
         {
             var input = new MemoryInputBytes(new[] {(byte)firstByte});
 
-            var result = tokenizer.TryTokenize((byte)firstByte, input, out var token);
+            var result = tokenizer.TryTokenize(input, out var token);
 
             Assert.False(result);
             Assert.Null(token);
@@ -44,7 +45,7 @@
 
             var input = StringBytesTestConverter.Convert(s);
             
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -61,7 +62,7 @@
         {
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -75,7 +76,7 @@
 
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -89,7 +90,7 @@
 
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -107,7 +108,7 @@ are the same.)";
             
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -123,7 +124,7 @@ are the same.)";
 
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -137,7 +138,7 @@ are the same.)";
 
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -151,7 +152,7 @@ are the same.)";
 
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -165,7 +166,7 @@ are the same.)";
 
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -179,7 +180,7 @@ are the same.)";
 
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
             
@@ -193,7 +194,7 @@ are the same.)";
 
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -210,7 +211,7 @@ are the same.)";
         {
             var bytes = StringBytesTestConverter.Convert(input);
 
-            var result = tokenizer.TryTokenize(bytes.First, bytes.Bytes, out var token);
+            var result = tokenizer.TryTokenize(bytes.Bytes, out var token);
 
             Assert.True(result);
 
@@ -224,7 +225,7 @@ are the same.)";
 
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -238,7 +239,7 @@ are the same.)";
 
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -252,7 +253,7 @@ are the same.)";
 
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = tokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = tokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 
@@ -264,11 +265,12 @@ are the same.)";
         {
             var input = new MemoryInputBytes(new byte[]
             {
+                0x28,
                 0xFE, 0xFF, 0x00, 0x4D, 0x00, 0x69, 0x00,
                 0x63, 0x29
             });
 
-            var result = tokenizer.TryTokenize(0x28, input, out var token);
+            var result = tokenizer.TryTokenize(input, out var token);
 
             Assert.True(result);
 
@@ -280,11 +282,12 @@ are the same.)";
         {
             var input = new MemoryInputBytes(new byte[]
             {
+                0x28,
                 0xFF, 0xFE, 0x4D, 0x00, 0x69, 0x00, 0x63,
                 0x00, 0x29
             });
 
-            var result = tokenizer.TryTokenize(0x28, input, out var token);
+            var result = tokenizer.TryTokenize(input, out var token);
 
             Assert.True(result);
 

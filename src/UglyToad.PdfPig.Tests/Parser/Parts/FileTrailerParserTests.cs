@@ -21,8 +21,7 @@ public class FirstPassParserStartXrefTests
                 456
 
             %%EOF
-            """,
-            false);
+            """);
 
         var result = FirstPassParser.GetFirstCrossReferenceOffset(
             input.Bytes,
@@ -54,8 +53,7 @@ public class FirstPassParserStartXrefTests
             % because I could hahaha
             startxref
             17
-            """,
-            false);
+            """);
 
         var result = FirstPassParser.GetFirstCrossReferenceOffset(
             input.Bytes,
@@ -87,8 +85,7 @@ public class FirstPassParserStartXrefTests
             % because I could hahaha
             start_rexf
             17
-            """,
-            false);
+            """);
 
 
         var result = FirstPassParser.GetFirstCrossReferenceOffset(
@@ -102,7 +99,7 @@ public class FirstPassParserStartXrefTests
     [Fact]
     public void BadInputBytesReturnsNull()
     {
-        var input = StringBytesTestConverter.Convert("11 0 obj", false);
+        var input = StringBytesTestConverter.Convert("11 0 obj");
 
         var result = FirstPassParser.GetFirstCrossReferenceOffset(
             input.Bytes,
@@ -125,8 +122,7 @@ public class FirstPassParserStartXrefTests
             startxref 
             << /Why (am i here?) >> 69
             %EOF
-            """,
-            false);
+            """);
 
         var result = FirstPassParser.GetFirstCrossReferenceOffset(
             input.Bytes,
@@ -147,7 +143,7 @@ public class FirstPassParserStartXrefTests
             endobj
 
             startxref 
-            """, false);
+            """);
 
         var result = FirstPassParser.GetFirstCrossReferenceOffset(
             input.Bytes,
@@ -180,8 +176,7 @@ public class FirstPassParserStartXrefTests
                      1274665676543
 
             %%EOF
-            """,
-            false);
+            """);
 
         var result = FirstPassParser.GetFirstCrossReferenceOffset(
             input.Bytes,
@@ -202,8 +197,7 @@ public class FirstPassParserStartXrefTests
                 57695
 
             %%EOF
-            """,
-            false);
+            """);
 
         var result = FirstPassParser.GetFirstCrossReferenceOffset(
             input.Bytes,

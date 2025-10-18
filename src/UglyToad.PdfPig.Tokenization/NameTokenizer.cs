@@ -1,15 +1,16 @@
 ﻿namespace UglyToad.PdfPig.Tokenization
 {
-    using System;
-    using System.Text;
     using Core;
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Text;
     using Tokens;
 
 #if NET
     using System.Text.Unicode;
 #endif
 
-    internal sealed class NameTokenizer : ITokenizer
+    internal sealed class NameTokenizer : InputByteTokenizer
     {
 #if NET
         static NameTokenizer()
@@ -18,13 +19,11 @@
         }
 #endif
 
-        public bool ReadsNextByte => false;
-
-        public bool TryTokenize(byte currentByte, IInputBytes inputBytes, out IToken token)
+        public override bool TryTokenize(IInputBytes inputBytes, [NotNullWhen(true)] out IToken? token)
         {
             token = null;
 
-            if (currentByte != '/')
+            if (inputBytes.Peek() != '/' || !inputBytes.MoveNext())
             {
                 return false;
             }
@@ -51,12 +50,7 @@
                         if (postEscapeRead == 2)
                         {
                             // We validated that the char is hex. So assume ASCII rules apply and shortcut hex decoding
-                            int high = escapedChars[0] <= '9' ? escapedChars[0] - '0' : ((escapedChars[0] & 0xF) + 9);
-                            int low = escapedChars[1] <= '9' ? escapedChars[1] - '0' : ((escapedChars[1] & 0xF) + 9);
-
-                            byte characterToWrite = (byte)(high * 16 + low);
-
-                            bytes.Write(characterToWrite);
+                            bytes.Write(HexToken.ConvertPair(escapedChars[0], escapedChars[1]));
 
                             escapeActive = false;
                             postEscapeRead = 0;
@@ -114,7 +108,7 @@
             var str = isValidUtf8
                 ? Encoding.UTF8.GetString(byteArray)
                 : Encoding.GetEncoding("windows-1252").GetString(byteArray);
-            
+
             token = NameToken.Create(str);
 
             return true;

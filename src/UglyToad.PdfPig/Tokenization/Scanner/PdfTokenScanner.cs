@@ -87,14 +87,10 @@
 
                 tokensRead++;
 
-                previousTokens[0] = previousTokens[1];
-                previousTokenPositions[0] = previousTokenPositions[1];
 
-                previousTokens[1] = previousTokens[2];
-                previousTokenPositions[1] = previousTokenPositions[2];
-
-                previousTokens[2] = coreTokenScanner.CurrentToken;
-                previousTokenPositions[2] = coreTokenScanner.CurrentTokenStart;
+                // Shift history
+                (previousTokens[0], previousTokens[1], previousTokens[2]) = (previousTokens[1], previousTokens[2], coreTokenScanner.CurrentToken);
+                (previousTokenPositions[0], previousTokenPositions[1], previousTokenPositions[2]) = (previousTokenPositions[1], previousTokenPositions[2], coreTokenScanner.CurrentTokenStart);
             }
 
             // We only read partial tokens.
@@ -118,7 +114,7 @@
                     if (match.Success && int.TryParse(match.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out var number))
                     {
                         startPosition = previousTokenPositions[1] + match.Index;
-                        objectNumber = new NumericToken(number);
+                        objectNumber = NumericToken.Create(number);
                     }
                     else
                     {
@@ -224,14 +220,9 @@
                     readTokens.Add(coreTokenScanner.CurrentToken);
                 }
 
-                previousTokens[0] = previousTokens[1];
-                previousTokenPositions[0] = previousTokenPositions[1];
-
-                previousTokens[1] = previousTokens[2];
-                previousTokenPositions[1] = previousTokenPositions[2];
-
-                previousTokens[2] = coreTokenScanner.CurrentToken;
-                previousTokenPositions[2] = coreTokenScanner.CurrentTokenStart;
+                // Shift history
+                (previousTokens[0], previousTokens[1], previousTokens[2]) = (previousTokens[1], previousTokens[2], coreTokenScanner.CurrentToken);
+                (previousTokenPositions[0], previousTokenPositions[1], previousTokenPositions[2]) = (previousTokenPositions[1], previousTokenPositions[2], coreTokenScanner.CurrentTokenStart);
             }
 
             if (!readStream && !IsToken(coreTokenScanner, OperatorToken.EndObject, out _))
@@ -468,7 +459,9 @@
             long streamDataEnd = inputBytes.CurrentOffset;
 
             if (possibleEndLocation == null)
+            {
                 return false;
+            }
 
             var lastEnd = possibleEndLocation;
 

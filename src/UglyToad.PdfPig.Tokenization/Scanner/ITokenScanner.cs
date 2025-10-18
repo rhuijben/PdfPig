@@ -1,5 +1,6 @@
 ﻿namespace UglyToad.PdfPig.Tokenization.Scanner
 {
+    using System.Diagnostics.CodeAnalysis;
     using Tokens;
 
     /// <summary>
@@ -16,11 +17,11 @@
         /// <summary>
         /// The currently read token.
         /// </summary>
-        IToken CurrentToken { get; }
+        IToken? CurrentToken { get; }
 
         /// <summary>
         /// Try reading a token of the specific type.
         /// </summary>
-        bool TryReadToken<T>(out T token) where T : class, IToken;
+        bool TryReadToken<T>([NotNullWhen(true)] out T? token) where T : class, IToken;
     }
 }

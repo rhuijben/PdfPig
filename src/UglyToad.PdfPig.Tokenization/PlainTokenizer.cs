@@ -1,16 +1,16 @@
 ﻿namespace UglyToad.PdfPig.Tokenization
 {
     using Core;
+    using System.Diagnostics.CodeAnalysis;
     using System.Text;
     using Tokens;
 
-    internal sealed class PlainTokenizer : ITokenizer
+    internal sealed class PlainTokenizer : InputByteTokenizer
     {
-        public bool ReadsNextByte => false;
-
-        public bool TryTokenize(byte currentByte, IInputBytes inputBytes, out IToken token)
+        public override bool TryTokenize(IInputBytes inputBytes, [NotNullWhen(true)] out IToken? token)
         {
-            if (ReadHelper.IsWhitespace(currentByte))
+            var firstByte = inputBytes.Peek() ?? 0;
+            if (firstByte == 0 || ReadHelper.IsWhitespace(firstByte))
             {
                 token = null;
 
@@ -19,8 +19,9 @@
 
             using var builder = new ValueStringBuilder(stackalloc char[16]);
 
-            builder.Append((char)currentByte);
-            
+            inputBytes.MoveNext();
+            builder.Append((char)inputBytes.CurrentByte);
+
             while (inputBytes.Peek() is { } b
                 && !ReadHelper.IsWhitespace(b)
                 && (char)b is not '<' and not '[' and not '/' and not ']' and not '>' and not '(' and not ')')

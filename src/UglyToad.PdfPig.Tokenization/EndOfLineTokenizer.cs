@@ -1,6 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Tokenization
 {
     using Core;
+    using System.Diagnostics.CodeAnalysis;
     using Tokens;
 
     /// <summary>
@@ -12,7 +13,7 @@
         public bool ReadsNextByte => false;
 
         /// <inheritdoc />
-        public bool TryTokenize(byte currentByte, IInputBytes inputBytes, out IToken token)
+        public bool TryTokenize(byte currentByte, IInputBytes inputBytes, [NotNullWhen(true)] out IToken? token)
         {
             token = null;
             if (currentByte != '\r' && currentByte != '\n')

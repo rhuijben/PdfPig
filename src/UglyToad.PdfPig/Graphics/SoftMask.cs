@@ -29,7 +29,7 @@
         /// attributes dictionary shall contain a CS entry defining the colour space in which
         /// the compositing computation is to be performed.
         /// </summary>
-        public StreamToken TransparencyGroup { get; private set; }
+        public StreamToken? TransparencyGroup { get; private set; }
 
         /// <summary>
         /// (Optional) An array of component values specifying the colour that shall be used
@@ -67,7 +67,7 @@
 
             var softMask = new SoftMask();
 
-            if (!dictionaryToken.TryGet(NameToken.S, pdfTokenScanner, out NameToken? s))
+            if (!dictionaryToken.TryGet<NameToken>(NameToken.S, pdfTokenScanner, out var s))
             {
                 /*
                  * (Required) A subtype specifying the method that shall be used in deriving
@@ -93,7 +93,7 @@
                 throw new Exception($"Invalid soft-mask Subtype '{s}' entry.");
             }
 
-            if (!dictionaryToken.TryGet(NameToken.G, pdfTokenScanner, out StreamToken g))
+            if (!dictionaryToken.TryGet<StreamToken>(NameToken.G, pdfTokenScanner, out var g))
             {
                 /*
                  * (Required) A transparency group XObject (see 11.6.6, "Transparency group
@@ -107,7 +107,7 @@
 
             softMask.TransparencyGroup = g;
 
-            if (dictionaryToken.TryGet(NameToken.Bc, pdfTokenScanner, out ArrayToken bc))
+            if (dictionaryToken.TryGet<ArrayToken>(NameToken.Bc, pdfTokenScanner, out var bc))
             {
                 /*
                  * (Optional) An array of component values specifying the colour that shall
@@ -121,7 +121,7 @@
                 softMask.BC = bc.Data.OfType<NumericToken>().Select(x => x.Data).ToArray();
             }
 
-            if (dictionaryToken.TryGet(NameToken.Tr, pdfTokenScanner, out NameToken trName))
+            if (dictionaryToken.TryGet<NameToken>(NameToken.Tr, pdfTokenScanner, out var trName))
             {
                 /*
                  * (Optional) A function object (see 7.10, "Functions") specifying the transfer

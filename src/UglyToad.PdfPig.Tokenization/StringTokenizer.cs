@@ -1,23 +1,22 @@
 ﻿namespace UglyToad.PdfPig.Tokenization
 {
-    using System.Text;
     using Core;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Text;
     using Tokens;
 
-    internal class StringTokenizer : ITokenizer
+    internal sealed class StringTokenizer : InputByteTokenizer
     {
         private readonly bool usePdfDocEncoding;
 
         private readonly StringBuilder stringBuilder = new StringBuilder();
-
-        public bool ReadsNextByte { get; } = false;
 
         public StringTokenizer(bool usePdfDocEncoding)
         {
             this.usePdfDocEncoding = usePdfDocEncoding;
         }
 
-        public bool TryTokenize(byte currentByte, IInputBytes inputBytes, out IToken token)
+        public override bool TryTokenize(IInputBytes inputBytes, [NotNullWhen(true)] out IToken? token)
         {
             token = null;
 
@@ -26,7 +25,7 @@
                 return false;
             }
 
-            if (currentByte != '(')
+            if (inputBytes.Peek() != '(' || !inputBytes.MoveNext())
             {
                 return false;
             }
@@ -153,7 +152,7 @@
             }
 
             StringToken.Encoding encodedWith;
-            string tokenStr;
+            string? tokenStr;
             if (builder.Length >= 2)
             {
                 if (builder[0] == 0xFE && builder[1] == 0xFF)
@@ -218,7 +217,7 @@
 
             builder.Clear();
 
-            token = new StringToken(tokenStr, encodedWith);
+            token = new StringToken(tokenStr!, encodedWith);
 
             return true;
         }

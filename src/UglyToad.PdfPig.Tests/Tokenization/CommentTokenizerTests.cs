@@ -15,7 +15,7 @@
         {
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = commentTokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = commentTokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.False(result);
             Assert.Null(token);
@@ -34,7 +34,7 @@
         {
             var input = StringBytesTestConverter.Convert(s);
 
-            var result = commentTokenizer.TryTokenize(input.First, input.Bytes, out var token);
+            var result = commentTokenizer.TryTokenize(input.Bytes, out var token);
 
             Assert.True(result);
 

@@ -20,11 +20,11 @@
         {
             DictionaryToken dictionaryToken = new DictionaryToken(new Dictionary<NameToken, IToken>()
             {
-                { NameToken.FunctionType, new NumericToken(0) },
+                { NameToken.FunctionType, NumericToken.Create(0) },
                 { NameToken.Domain, GetArrayToken(0, 1) },
                 { NameToken.Range, GetArrayToken(0, 1, 0, 1, 0, 1, 0, 1) },
 
-                { NameToken.BitsPerSample, new NumericToken(8) },
+                { NameToken.BitsPerSample, NumericToken.Create(8) },
                 { NameToken.Decode, GetArrayToken(0, 1, 0, 1, 0, 1, 0, 1) },
                 { NameToken.Encode, GetArrayToken(0, 254) },
                 { NameToken.Size, GetArrayToken(255) }
@@ -53,11 +53,11 @@
         {
             DictionaryToken dictionaryToken = new DictionaryToken(new Dictionary<NameToken, IToken>()
             {
-                { NameToken.FunctionType, new NumericToken(0) },
+                { NameToken.FunctionType, NumericToken.Create(0) },
                 { NameToken.Domain, GetArrayToken(0, 1) },
                 { NameToken.Range, GetArrayToken(0, 1) },
 
-                { NameToken.BitsPerSample, new NumericToken(16) },
+                { NameToken.BitsPerSample, NumericToken.Create(16) },
                 { NameToken.Size, GetArrayToken(5) }
             });
 
@@ -95,11 +95,11 @@
         {
             DictionaryToken dictionaryToken = new DictionaryToken(new Dictionary<NameToken, IToken>()
             {
-                { NameToken.FunctionType, new NumericToken(0) },
+                { NameToken.FunctionType, NumericToken.Create(0) },
                 { NameToken.Domain, GetArrayToken(0, 1) },
                 { NameToken.Range, GetArrayToken(0, 1) },
 
-                { NameToken.BitsPerSample, new NumericToken(8) },
+                { NameToken.BitsPerSample, NumericToken.Create(8) },
                 { NameToken.Size, GetArrayToken(5) }
             });
 
@@ -137,11 +137,11 @@
         {
             DictionaryToken dictionaryToken = new DictionaryToken(new Dictionary<NameToken, IToken>()
             {
-                { NameToken.FunctionType, new NumericToken(0) },
+                { NameToken.FunctionType, NumericToken.Create(0) },
                 { NameToken.Domain, GetArrayToken(0, 1, 0, 1) },
                 { NameToken.Range, GetArrayToken(0, 1, 0, 1, 0, 1) },
 
-                { NameToken.BitsPerSample, new NumericToken(8) },
+                { NameToken.BitsPerSample, NumericToken.Create(8) },
                 { NameToken.Size, GetArrayToken(2, 2) }
             });
 
@@ -179,11 +179,11 @@
         {
             DictionaryToken dictionaryToken = new DictionaryToken(new Dictionary<NameToken, IToken>()
             {
-                { NameToken.FunctionType, new NumericToken(0) },
+                { NameToken.FunctionType, NumericToken.Create(0) },
                 { NameToken.Domain, GetArrayToken(0, 1) },
                 { NameToken.Range, GetArrayToken(0, 1, 0, 1, 0, 1) },
 
-                { NameToken.BitsPerSample, new NumericToken(8) },
+                { NameToken.BitsPerSample, NumericToken.Create(8) },
                 { NameToken.Size, GetArrayToken(2) }
             });
 

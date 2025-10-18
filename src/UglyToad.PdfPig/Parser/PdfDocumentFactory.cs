@@ -25,6 +25,8 @@
 
     internal static class PdfDocumentFactory
     {
+        const int MaxReadAllSize = 1024 * 1024 * 2; // 2 MB
+
         public static PdfDocument Open(ReadOnlyMemory<byte> memory, ParsingOptions? options = null)
         {
             var inputBytes = new MemoryInputBytes(memory);
@@ -34,12 +36,30 @@
 
         public static PdfDocument Open(string filename, ParsingOptions? options = null)
         {
-            if (!File.Exists(filename))
-            {
-                throw new InvalidOperationException("No file exists at: " + filename);
-            }
+            FileInfo fi = new FileInfo(filename);
 
-            return Open(File.ReadAllBytes(filename), options);
+            if (!fi.Exists)
+            {
+                throw new FileNotFoundException("No file exists at: " + filename);
+            }
+            else if (fi.Length < MaxReadAllSize) // Includes size '0' for some system streams
+            {
+                var bytes = File.ReadAllBytes(fi.FullName);
+                return Open(bytes, options);
+            }
+            else
+            {
+                FileStream fs = File.OpenRead(filename);
+                try
+                {
+                    return Open(new StreamInputBytes(fs, true), options);
+                }
+                catch
+                {
+                    fs.Close();
+                    throw;
+                }
+            }
         }
 
         internal static PdfDocument Open(Stream stream, ParsingOptions? options)
@@ -58,6 +78,14 @@
             }
             else
             {
+                if (stream.Length == 0)
+                {
+                    // We have some kind of buffer stream, where we can seek, but not fetch the length. Directly after opening we need to seek to the end to find xrefs though.
+                    // Lets determine the size
+                    stream.CopyTo(Stream.Null);
+                    stream.Seek(0, SeekOrigin.Begin);
+                }
+
                 streamInput = new StreamInputBytes(stream, false);
                 initialPosition = stream.Position;
             }

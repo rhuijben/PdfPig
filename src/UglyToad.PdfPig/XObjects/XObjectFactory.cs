@@ -106,7 +106,7 @@
                 if (isJpxDecode)
                 {
                     // Optional for JPX
-                    if (dictionary.TryGet(NameToken.BitsPerComponent, out NumericToken? bitsPerComponentToken))
+                    if (dictionary.TryGet(NameToken.BitsPerComponent, out NumericToken bitsPerComponentToken))
                     {
                         bitsPerComponent = bitsPerComponentToken.Int;
                         System.Diagnostics.Debug.Assert(bitsPerComponent == Jpeg2000Helper.GetBitsPerComponent(xObject.Stream.Data.Span));
@@ -119,7 +119,7 @@
                 }
                 else
                 {
-                    if (!dictionary.TryGet(NameToken.BitsPerComponent, out NumericToken? bitsPerComponentToken))
+                    if (!dictionary.TryGet(NameToken.BitsPerComponent, out NumericToken bitsPerComponentToken))
                     {
                         throw new PdfDocumentFormatException($"No bits per component defined for image: {dictionary}.");
                     }
@@ -134,7 +134,7 @@
                 intent = renderingIntentToken.Data.ToRenderingIntent();
             }
 
-            var interpolate = dictionary.TryGet(NameToken.Interpolate, out BooleanToken? interpolateToken)
+            var interpolate = dictionary.TryGet(NameToken.Interpolate, out BooleanToken interpolateToken)
                               && interpolateToken.Data;
 
             var supportsFilters = true;
@@ -167,7 +167,7 @@
                 {
                     details = resourceStore.GetColorSpaceDetails(colorSpaceNameToken, dictionary);
                 }
-                else if (dictionary.TryGet(NameToken.ColorSpace, out ArrayToken? colorSpaceArrayToken)
+                else if (dictionary.TryGet(NameToken.ColorSpace, out ArrayToken colorSpaceArrayToken)
                     && colorSpaceArrayToken.Length > 0 && colorSpaceArrayToken.Data[0] is NameToken firstColorSpaceName)
                 {
                     details = resourceStore.GetColorSpaceDetails(firstColorSpaceName, dictionary);

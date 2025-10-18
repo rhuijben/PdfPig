@@ -648,12 +648,12 @@
             {
                 {NameToken.Type, NameToken.Xobject },
                 {NameToken.Subtype, NameToken.Image },
-                {NameToken.Width, new NumericToken(info.Width) },
-                {NameToken.Height, new NumericToken(info.Height) },
-                {NameToken.BitsPerComponent, new NumericToken(info.BitsPerComponent)},
+                {NameToken.Width, NumericToken.Create(info.Width) },
+                {NameToken.Height, NumericToken.Create(info.Height) },
+                {NameToken.BitsPerComponent, NumericToken.Create(info.BitsPerComponent)},
                 {NameToken.ColorSpace, colorSpace},
                 {NameToken.Filter, NameToken.DctDecode},
-                {NameToken.Length, new NumericToken(data.Length)}
+                {NameToken.Length, NumericToken.Create(data.Length)}
             };
 
             var reference = documentBuilder.AddImage(new DictionaryToken(imgDictionary), data);
@@ -747,8 +747,8 @@
                 }
             }
 
-            var widthToken = new NumericToken(png.Width);
-            var heightToken = new NumericToken(png.Height);
+            var widthToken = NumericToken.Create(png.Width);
+            var heightToken = NumericToken.Create(png.Height);
 
             IndirectReferenceToken? smaskReference = null;
 
@@ -776,9 +776,9 @@
                     {NameToken.Width, widthToken},
                     {NameToken.Height, heightToken},
                     {NameToken.ColorSpace, NameToken.Devicegray},
-                    {NameToken.BitsPerComponent, new NumericToken(8)},
-                    {NameToken.Decode, new ArrayToken(new IToken[] { new NumericToken(0), new NumericToken(1) })},
-                    {NameToken.Length, new NumericToken(compressedSmask.Length)},
+                    {NameToken.BitsPerComponent, NumericToken.Create(8)},
+                    {NameToken.Decode, new ArrayToken(new IToken[] { NumericToken.Create(0), NumericToken.Create(1) })},
+                    {NameToken.Length, NumericToken.Create(compressedSmask.Length)},
                     {NameToken.Filter, NameToken.FlateDecode}
                 };
 
@@ -793,10 +793,10 @@
                 {NameToken.Subtype, NameToken.Image},
                 {NameToken.Width, widthToken},
                 {NameToken.Height, heightToken},
-                {NameToken.BitsPerComponent, new NumericToken(8)},
+                {NameToken.BitsPerComponent, NumericToken.Create(8)},
                 {NameToken.ColorSpace, NameToken.Devicergb},
                 {NameToken.Filter, NameToken.FlateDecode},
-                {NameToken.Length, new NumericToken(compressed.Length)}
+                {NameToken.Length, NumericToken.Create(compressed.Length)}
             };
 
             if (smaskReference != null)

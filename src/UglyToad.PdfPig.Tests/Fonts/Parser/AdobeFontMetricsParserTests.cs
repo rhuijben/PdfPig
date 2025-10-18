@@ -73,7 +73,7 @@ EndCharMetrics";
         [Fact]
         public void CanParseAfmFile()
         {
-            var input = StringBytesTestConverter.Convert(CourierAfmSnippet, false);
+            var input = StringBytesTestConverter.Convert(CourierAfmSnippet);
 
             var metrics = AdobeFontMetricsParser.Parse(input.Bytes, false);
 

@@ -162,7 +162,7 @@
 
             if (token is DictionaryToken dict)
             {
-                var resolvedItems = new Dictionary<NameToken, IToken>();
+                var resolvedItems = new Dictionary<NameToken, IToken?>();
                 foreach (var kvp in dict.Data)
                 {
                     var value = kvp.Value;
@@ -183,7 +183,7 @@
 
             if (token is ArrayToken arr)
             {
-                var resolvedItems = new List<IToken>();
+                var resolvedItems = new List<IToken?>();
                 for (int i = 0; i < arr.Length; i++)
                 {
                     var value = arr.Data[i] is IndirectReferenceToken reference ? scanner.Get(reference.Data)?.Data : arr.Data[i];

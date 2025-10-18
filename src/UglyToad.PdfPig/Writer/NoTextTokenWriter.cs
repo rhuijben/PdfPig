@@ -110,7 +110,7 @@ namespace UglyToad.PdfPig.Writer
                 var compressedBytes = DataCompresser.CompressBytes(outputStreamT.ToArray());
                 var outputStreamDictionary = new Dictionary<NameToken, IToken>()
                 {
-                    { NameToken.Length, new NumericToken(compressedBytes.Length) },
+                    { NameToken.Length, NumericToken.Create(compressedBytes.Length) },
                     { NameToken.Filter, NameToken.FlateDecode }
                 };
                 foreach (var kv in streamToken.StreamDictionary.Data)

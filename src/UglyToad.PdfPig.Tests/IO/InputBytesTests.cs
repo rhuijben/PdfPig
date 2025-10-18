@@ -20,17 +20,25 @@
                 Assert.Equal(bytes.Length, array.Length);
                 Assert.Equal(bytes.Length, stream.Length);
 
+                // Start of stream. 0 bytes read
                 Assert.Equal(0, array.CurrentOffset);
-                Assert.Equal(0, stream.CurrentOffset);
+                Assert.Equal(array.CurrentOffset, stream.CurrentOffset);
 
+                // No actual data read yet. So value is '\0'
+                Assert.Equal(0, array.CurrentByte);
+                Assert.Equal(array.CurrentByte, stream.CurrentByte);
+
+                // Seek as if we read 5 bytes. So as if we just read '5'
                 array.Seek(5);
                 stream.Seek(5);
 
+                Assert.Equal(5, array.CurrentOffset);
                 Assert.Equal(array.CurrentOffset, stream.CurrentOffset);
 
                 Assert.Equal((byte)'5', array.CurrentByte);
                 Assert.Equal(array.CurrentByte, stream.CurrentByte);
 
+                Assert.Equal((byte)'6', array.Peek());
                 Assert.Equal(array.Peek(), stream.Peek());
 
                 array.Seek(0);

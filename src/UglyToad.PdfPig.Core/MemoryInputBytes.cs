@@ -9,7 +9,6 @@
     /// </summary>
     public sealed class MemoryInputBytes : IInputBytes
     {
-        private readonly int upperBound;
         private readonly ReadOnlyMemory<byte> memory;
 
         /// <summary>
@@ -19,26 +18,22 @@
         public MemoryInputBytes(ReadOnlyMemory<byte> memory)
         {
             this.memory = memory;
-
-            upperBound = this.memory.Length - 1;
-
-            currentOffset = -1;
+            this.currentOffset = 0;
         }
 
         private int currentOffset;
         /// <inheritdoc />
-        public long CurrentOffset => currentOffset + 1;
+        public long CurrentOffset => currentOffset;
 
         /// <inheritdoc />
         public bool MoveNext()
         {
-            if (currentOffset == upperBound)
+            if (currentOffset >= memory.Length)
             {
                 return false;
             }
 
-            currentOffset++;
-            CurrentByte = memory.Span[currentOffset];
+            CurrentByte = memory.Span[currentOffset++];
             return true;
         }
 
@@ -46,30 +41,33 @@
         public byte CurrentByte { get; private set; }
 
         /// <inheritdoc />
-        public long Length => memory.Span.Length;
+        public long Length => memory.Length;
 
         /// <inheritdoc />
         public byte? Peek()
         {
-            if (currentOffset == upperBound)
-            {
-                return null;
-            }
+            int readOffset = currentOffset;
 
-            return memory.Span[currentOffset + 1];
+            return (readOffset >= 0 && readOffset < memory.Length) ? memory.Span[readOffset] : null;
         }
 
         /// <inheritdoc />
         public bool IsAtEnd()
         {
-            return currentOffset == upperBound;
+            return currentOffset >= memory.Length;
         }
 
         /// <inheritdoc />
         public void Seek(long position)
         {
-            currentOffset = (int)position - 1;
-            CurrentByte = currentOffset < 0 ? (byte)0 : memory.Span[currentOffset];
+            if (position < 0 || position > memory.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(position), position, message: null);
+            }
+
+            currentOffset = (int)position;
+            int readOffset = currentOffset - 1;
+            CurrentByte = (readOffset >= 0 && readOffset <= memory.Length) ? memory.Span[readOffset] : (byte)0;
         }
 
         /// <inheritdoc />
@@ -80,9 +78,9 @@
                 return 0;
             }
 
-            var viableLength = (memory.Length - currentOffset - 1);
+            var viableLength = (memory.Length - currentOffset);
             var readLength = viableLength < buffer.Length ? viableLength : buffer.Length;
-            var startFrom = currentOffset + 1;
+            var startFrom = currentOffset;
 
             memory.Span.Slice(startFrom, readLength).CopyTo(buffer);
 
@@ -96,8 +94,23 @@
         }
 
         /// <inheritdoc />
+        public ReadOnlyMemory<byte> PeekBuffer()
+        {
+            int startFrom = currentOffset;
+            int length = memory.Length - startFrom;
+
+            if (length <= 0)
+            {
+                return ReadOnlyMemory<byte>.Empty;
+            }
+
+            return memory.Slice(startFrom, length);
+        }
+
+        /// <inheritdoc />
         public void Dispose()
         {
+            // No resources to dispose
         }
     }
 }

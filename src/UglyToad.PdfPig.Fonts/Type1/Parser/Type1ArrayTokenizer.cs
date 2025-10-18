@@ -12,7 +12,7 @@
     public sealed class Type1ArrayTokenizer : ITokenizer
     {
         /// <inheritdoc />
-        public bool ReadsNextByte { get; } = false;
+        public bool ReadsNextByte => false;
 
         private static readonly char[] Space = [' '];
 

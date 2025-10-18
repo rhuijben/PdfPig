@@ -1,6 +1,7 @@
 ﻿namespace UglyToad.PdfPig.Tokenization
 {
     using Core;
+    using System.Diagnostics.CodeAnalysis;
     using Tokens;
 
     /// <summary>
@@ -19,6 +20,6 @@
         /// <param name="currentByte">The byte read to detect this is the correct tokenizer to use.</param>
         /// <param name="inputBytes">The input data.</param>
         /// <param name="token">The token of the corresponding type if read.</param>
-        bool TryTokenize(byte currentByte, IInputBytes inputBytes, out IToken token);
+        bool TryTokenize(byte currentByte, IInputBytes inputBytes, [NotNullWhen(true)] out IToken? token);
     }
 }

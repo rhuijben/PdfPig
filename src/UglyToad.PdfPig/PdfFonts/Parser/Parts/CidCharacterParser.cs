@@ -14,12 +14,12 @@
 
             for (var i = 0; i < numeric.Int; i++)
             {
-                if (!scanner.TryReadToken(out HexToken sourceCode))
+                if (!scanner.TryReadToken<HexToken>(out var sourceCode))
                 {
                     throw new InvalidOperationException("The first token in a line for Cid Characters should be a hex, instead it was: " + scanner.CurrentToken);
                 }
 
-                if (!scanner.TryReadToken(out NumericToken destinationCode))
+                if (!scanner.TryReadToken<NumericToken>(out var destinationCode))
                 {
                     throw new InvalidOperationException("The destination token in a line for Cid Character should be an integer, instead it was: " + scanner.CurrentToken);
                 }

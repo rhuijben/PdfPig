@@ -115,19 +115,19 @@
                             var font = CompactFontFormatParser.Parse(new CompactFontFormatData(fontFile));
                             return new PdfCidCompactFontFormatFont(font);
                         }
-                        
+
                         var input = new TrueTypeDataBytes(new MemoryInputBytes(fontFile));
                         var ttf = TrueTypeFontParser.Parse(input);
                         return new PdfCidTrueTypeFont(ttf);
                     }
                 case DescriptorFontFile.FontFileType.FromSubtype:
                     {
-                        if (!DirectObjectFinder.TryGet(descriptor.FontFile.ObjectKey, pdfScanner, out StreamToken? str))
+                        if (!DirectObjectFinder.TryGet<StreamToken>(descriptor.FontFile.ObjectKey, pdfScanner, out var str))
                         {
                             throw new NotSupportedException("Cannot read CID font from subtype.");
                         }
 
-                        if (!str.StreamDictionary.TryGet(NameToken.Subtype, out NameToken? subtypeName))
+                        if (!str.StreamDictionary.TryGet<NameToken>(NameToken.Subtype, out var subtypeName))
                         {
                             throw new PdfDocumentFormatException($"The font file stream did not contain a subtype entry: {str.StreamDictionary}.");
                         }
@@ -256,7 +256,7 @@
                     }
                 }
             }
-            
+
             return new VerticalWritingMetrics(dw2, verticalDisplacements, positionVectors);
         }
 
@@ -342,7 +342,7 @@
             {
                 return false;
             }
-            
+
             // See https://docs.fileformat.com/font/cff/
             // https://adobe-type-tools.github.io/font-tech-notes/pdfs/5176.CFF.pdf
             byte major = data[0]; // Major version

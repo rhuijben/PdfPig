@@ -6,28 +6,18 @@
 
     internal static class StringBytesTestConverter
     {
-        public static Result Convert(string s, bool readFirst = true)
+        public static Result Convert(string s)
         {
             var input = new MemoryInputBytes(Encoding.UTF8.GetBytes(s));
 
-            byte initialByte = 0;
-            if (readFirst)
-            {
-                input.MoveNext();
-                initialByte = input.CurrentByte;
-            }
-            
             return new Result
             {
-                First = initialByte,
                 Bytes = input
             };
         }
 
         public class Result
         {
-            public byte First { get; set; }
-
             public IInputBytes Bytes { get; set; }
         }
 

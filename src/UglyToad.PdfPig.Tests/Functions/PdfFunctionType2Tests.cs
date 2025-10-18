@@ -11,7 +11,7 @@
         {
             DictionaryToken dictionaryToken = new DictionaryToken(new Dictionary<NameToken, IToken>()
             {
-                { NameToken.FunctionType, new NumericToken(2) },
+                { NameToken.FunctionType, NumericToken.Create(2) },
                 { NameToken.Domain, new ArrayToken(domain.Select(v => new NumericToken(v)).ToArray()) },
                 { NameToken.Range, new ArrayToken(range.Select(v => new NumericToken(v)).ToArray()) },
 

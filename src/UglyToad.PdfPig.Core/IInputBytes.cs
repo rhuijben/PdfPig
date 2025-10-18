@@ -39,7 +39,7 @@
         bool IsAtEnd();
 
         /// <summary>
-        /// Move to a given position.
+        /// Move to a given position. Resets <see cref="CurrentByte"/> to the value read when at <paramref name="position"/>,
         /// </summary>
         void Seek(long position);
 
@@ -49,5 +49,11 @@
         /// <param name="buffer">A buffer with a length corresponding to the number of bytes to read.</param>
         /// <returns>The number of bytes successfully read.</returns>
         int Read(Span<byte> buffer);
+
+        /// <summary>
+        /// Returns a memory block containing all the bytes that have been read ahead but not consumed.
+        /// </summary>
+        /// <returns></returns>
+        ReadOnlyMemory<byte> PeekBuffer();
     }
 }

@@ -82,7 +82,7 @@
         /// <summary>
         /// Checks if two names are equal.
         /// </summary>
-        public static bool operator ==(NameToken name1, NameToken name2)
+        public static bool operator ==(NameToken? name1, NameToken? name2)
         {
             if (ReferenceEquals(name1, name2))
             {
@@ -95,7 +95,7 @@
         /// <summary>
         /// Checks two names for lack of equality.
         /// </summary>
-        public static bool operator !=(NameToken name1, NameToken name2)
+        public static bool operator !=(NameToken? name1, NameToken? name2)
         {
             return !(name1 == name2);
         }
